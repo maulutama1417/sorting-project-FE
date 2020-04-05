@@ -1,0 +1,18 @@
+#header {
+    width: 100%;
+    overflow: hidden;
+    height: 44px;
+}
+
+#main {
+    margin-left: 220px;
+    padding-top: 0px;
+}
+
+#sidebar {
+    height: 100%;
+    width: 200px;
+    background-color:  #9292af;
+    position: fixed!important;
+    overflow: auto;
+}
