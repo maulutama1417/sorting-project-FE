@@ -16,6 +16,7 @@ import { CalendarModule } from 'angular-calendar';
 import { SchedulerModule } from '@progress/kendo-angular-scheduler';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';  
+import { DayPilotModule } from 'daypilot-pro-angular';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ToastrModule } from 'ngx-toastr';
     CalendarModule,
     SchedulerModule,
     BrowserAnimationsModule,
-    ToastrModule
+    ToastrModule,
+    DayPilotModule
   ],
   providers: [
     
