@@ -1,9 +1,10 @@
-<div id="sidebar">
-  <app-sidebar></app-sidebar>
+<div *ngIf="route!='/login'" class="page-wrapper">
+    <div class="page-container">
+        <!-- <scheduler-component></scheduler-component> -->
+        <app-sidebar></app-sidebar>
+        <router-outlet></router-outlet>
+    </div>
 </div>
-<div id="header">
-  <app-header></app-header>
-</div>
-<div id="main">
-  <router-outlet></router-outlet>
+<div *ngIf="route=='/login'">
+    <app-login></app-login>
 </div>

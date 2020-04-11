@@ -1,0 +1,53 @@
+<div class="logo" style="padding:0px 0px 10px 0px">
+    <a href="index.html">
+      <img src="assets/images/logo-imigrasi-pengayoman-2.png" alt="logo" class="logo-default" width="200px" />
+    </a>
+    <h2>PATRIA</h2>
+    <h4>LEADING ENGINEERING</h4>
+  </div>
+  <!-- END LOGO -->
+  <!-- BEGIN LOGIN -->
+  <div class="content">
+    <!-- BEGIN LOGIN FORM -->
+    <!-- <form class="login-form" action="index.html" method="post"> -->
+    <h3 *ngIf="!isLogin" class="form-title font-white">Sign In</h3>
+    <h3 *ngIf="isLogin" class="form-title font-white">Pilih Jabatan</h3>
+    <div class="alert alert-danger display-hide">
+      <button class="close" data-close="alert"></button>
+      <span>Enter any username and password. </span>
+    </div>
+    <form #form="ngForm" (ngSubmit)="onLogin()">
+      <div *ngIf="!isLogin">
+        <div class="alert alert-danger alert-dismissable" role="alert" *ngIf="messageError != ''">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+          <i class="fa fa-times"></i> {{messageError}}
+        </div>
+        <div class="form-group">
+          <label class="control-label visible-ie8 visible-ie9">Username</label>
+          <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" autofocus placeholder="Username"
+            name="username" [(ngModel)]="model.username" inputFilter="int" />
+        </div>
+        <div class="form-group">
+          <label class="control-label visible-ie8 visible-ie9">Password</label>
+          <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password"
+            name="password" [(ngModel)]="model.password" />
+        </div>
+        <div class="form-actions" style="border-bottom:none;padding-top:5px">
+          <button type="submit" class="btn dark btn-block uppercase">Login</button>
+        </div>
+      </div>
+      <!-- <div *ngIf="isLogin">
+        <div class="form-group">
+          <label class="control-label visible-ie8 visible-ie9">Pilih Jabatan</label>
+          <label class="control-label visible-ie8 visible-ie9" *ngIf="mapUserGroup.length==0">Tidak memiliki jabatan Silahkan hubungi Admin anda</label>
+          <select [(ngModel)]="selectJabatan" name="selectJabatan" class="form-control form-control-solid placeholder-no-fix" *ngIf="mapUserGroup.length>0">
+            <option *ngFor="let item of mapUserGroup" [ngValue]="item">{{item.userGroup.namaUserGroup}}</option>
+          </select>
+        </div>
+        <div class="form-actions" style="border-bottom:none;padding-top:5px">
+          <button type="button" class="btn dark btn-block uppercase" (click)="jabatanLogin()">Submit</button>
+        </div>
+      </div> -->
+    </form>
+    </div>
+  

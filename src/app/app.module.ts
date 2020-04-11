@@ -1,48 +1,48 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { KomponenComponent } from './controller/main/komponen/komponen.component';
-import { MasterComponent } from './controller/main/master/master.component';
-import { SortingComponent } from './controller/main/sorting/sorting.component';
-import { LoginComponent } from './controller/main/login/login.component';
-import { SidebarComponent } from './controller/sidebar/sidebar.component';
-import { HeaderComponent } from './controller/header/header.component';
-import { FooterComponent } from './controller/footer/footer.component';
+import {SchedulerModule} from "./scheduler/scheduler.module";
+import { SideBarComponent } from './controller/side-bar/side-bar.component';
+import { AppRoutingModule } from './app-routing.module';
+import { LoginComponent } from './controller/login/login.component';
+import { DashboardComponent } from './controller/dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
-import { HomeComponent } from './controller/main/home/home.component';
-import { CalendarModule } from 'angular-calendar';
-import { SchedulerModule } from '@progress/kendo-angular-scheduler';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';  
-import { DayPilotModule } from 'daypilot-pro-angular';
+import { KomponenComponent } from './controller/komponen/komponen.component';
+import { ProdukComponent } from './controller/produk/produk.component';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { DatePipe } from '@angular/common';
+import { SortingService } from './_service/_sortingservice/sorting.service';
+import { LoginService } from './_service/_loginservice/login.service';
+import { KomponenService } from './_service/_komponenservice/komponen.service';
+import { ProdukService } from './_service/_produkservice/produk.service';
+import { HttpModule } from '@angular/http'
+import { PagingService } from './_service/_common/paging.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    KomponenComponent,
-    MasterComponent,
-    SortingComponent,
+    SideBarComponent,
     LoginComponent,
-    SidebarComponent,
-    HeaderComponent,
-    FooterComponent,
-    HomeComponent
+    DashboardComponent,
+    KomponenComponent,
+    ProdukComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
+    SchedulerModule,
     AppRoutingModule,
     FormsModule,
-    CalendarModule,
-    SchedulerModule,
-    BrowserAnimationsModule,
-    ToastrModule,
-    DayPilotModule
+    HttpModule
+    
+   
   ],
   providers: [
-    
+    DatePipe,
+    SortingService,
+    LoginService,
+    ProdukService,
+    KomponenService,
+    PagingService
   ],
   bootstrap: [AppComponent]
 })

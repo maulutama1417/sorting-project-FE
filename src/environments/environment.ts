@@ -1,11 +1,24 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-var portApi = 8080;
-var urlApi = 'http://localhost';
+
+const development = {
+  url : 'http://localhost:8080'
+}
+
+const apiGateway = development;
+
+const pathProduk = '/produk';
+const pathKomponen = '/komponen';
+const pathLogin = '/login';
+const pathSorting = '/sorting';
+
 export const environment = {
   production: false,
-  urlSorting : urlApi+':'+portApi+'/sorting'
+  urlProduk : apiGateway.url + pathProduk,
+  urlKomponen :apiGateway.url + pathKomponen,
+  urlLogin : apiGateway.url + pathLogin,
+  urlSorting : apiGateway.url + pathSorting,
 };
 
 

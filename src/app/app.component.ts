@@ -1,4 +1,6 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -6,11 +8,17 @@ import { Component, ElementRef } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'front-end';
-  constructor(private elementRef: ElementRef){
 
+  route: string;
+  showLoader: boolean
+
+  constructor(
+    location: Location,
+    router: Router,
+    public vcr: ViewContainerRef
+  ) {
+    router.events.subscribe(val => {
+      this.route = location.path();
+    });
   }
-  ngAfterViewInit(){
-    this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#d3d3d6';
- }
 }

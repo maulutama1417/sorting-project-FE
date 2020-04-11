@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "front-end": {
+    "daypilot-project": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/front-end",
+            "outputPath": "dist/daypilot-project",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -24,13 +24,25 @@
               "src/assets"
             ],
             "styles": [
-              {
-                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
-              },
-              "src/styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/font-awesome/css/font-awesome.min.css",
+              "src/assets/css/components.min.css",
+              "src/assets/css/default.min.css",
+              "src/assets/css/custom.min.css",
+              "src/assets/css/layout.min.css",
+              "src/assets/css/login.min.css",
+              "src/assets/css/datepicker.min.css",
+              "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [ "src/assets/js/jquery.min.js",
+              "src/assets/js/bootstrap.min.js",
+              "src/assets/js/datepicker.min.js",
+              "src/assets/js/morris.min.js",
+              "src/assets/js/raphael-min.js",
+              "src/assets/js/app.min.js",
+              "src/assets/js/dashboard.min.js",
+              "src/assets/js/components-date-time-pickers.min.js",
+              "src/assets/js/layout.min.js"]
           },
           "configurations": {
             "production": {
@@ -66,18 +78,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "front-end:build"
+            "browserTarget": "daypilot-project:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "front-end:build:production"
+              "browserTarget": "daypilot-project:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "front-end:build"
+            "browserTarget": "daypilot-project:build"
           }
         },
         "test": {
@@ -92,11 +104,7 @@
               "src/assets"
             ],
             "styles": [
-              {
-                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
-              },
-              "src/styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "src/styles.css"
             ],
             "scripts": []
           }
@@ -118,16 +126,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "front-end:serve"
+            "devServerTarget": "daypilot-project:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "front-end:serve:production"
+              "devServerTarget": "daypilot-project:serve:production"
             }
           }
         }
       }
-    }
-  },
-  "defaultProject": "front-end"
+    }},
+  "defaultProject": "daypilot-project"
 }
