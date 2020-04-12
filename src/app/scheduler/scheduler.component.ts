@@ -33,8 +33,11 @@ export class SchedulerComponent implements AfterViewInit {
   flagLoad: boolean;
   paging: number = 5;
   maxPage: number;
-  page: number;
-  displayItem: any [] = []
+  page: number = 0;
+  dataTemp: any [] = []
+  eventsTemp: any[] = [];
+  resourcesTemp: DayPilot.ResourceData[] = [];
+
 
 
   config: DayPilot.SchedulerConfig = {
@@ -104,13 +107,14 @@ export class SchedulerComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     // window.alert( DayPilot.Date.parse('2020-04-08T00:00:00','yyyy-MM-ddTHH:mm:ss'));
-    this.ds.getResources().subscribe(result => this.config.resources = result);
+    // this.ds.getResources().subscribe(result => this.config.resources = result);
 
-    const from = this.scheduler.control.visibleStart();
-    const to = this.scheduler.control.visibleEnd();
-    this.ds.getEvents(from, to).subscribe(result => {
-      this.events = result;
-    });
+    // const from = this.scheduler.control.visibleStart();
+    // const to = this.scheduler.control.visibleEnd();
+    // this.ds.getEvents(from, to).subscribe(result => {
+    //   this.events = result;
+    // });
+    this.changeDay();
   }
 
   changeDay(inp = '2') {
@@ -126,21 +130,52 @@ export class SchedulerComponent implements AfterViewInit {
     this.sortingService.findAll(false,this.format.setTanggalToStr(now,2),this.format.setTanggalToStr(now,2))
     .subscribe( output => {
       let hasil = output.json();
-      this.events = hasil.events;
+      this.eventsTemp = hasil.events;
+      this.resourcesTemp = hasil.resource;
+      this.dataTemp = hasil.hasilSorting;
+      // this.events = hasil.events;
       this.config.resources = hasil.resource;
-      this.data = hasil.hasilSorting;
+      // this.data = hasil.hasilSorting;
+      this.page = 0;
       this.setPage()
     })
   }
 
-  setPage(page = 1) {
-    if (this.data.length == 0) {
+  setPage(page = 0, paging=this.paging) {
+    this.events = [];
+    this.data=[];
+    this.maxPage = this.dataTemp.length/paging;
+    this.maxPage = (this.dataTemp.length%paging) == 0? Math.round(this.maxPage) :  Math.round(this.maxPage) + 1;
+    if (this.dataTemp.length == 0) {
       this.page = 0;
       this.maxPage = 0
     } else {
-      this.page = page;
-      this.maxPage = this.data.length
+      if (page==1){
+        this.page++;
+      } else if (page==-1) {
+        this.page--;
+      }
+      // let items : any[] = [];
+      if ((this.dataTemp.length - (this.page*paging)) < paging) {
+        console.log((this.page * paging) + (this.dataTemp.length%paging));
+        for (let i = (this.page * paging); i < (this.page * paging) + (this.dataTemp.length%paging); i++) {
+          this.events.push(this.eventsTemp[i]);
+          this.data.push(this.dataTemp[i]);
+        }
+      } else {
+        for (let i = this.page * paging; i < (this.page +1) * paging; i++) {
+          this.events.push(this.eventsTemp[i]);
+          this.data.push(this.dataTemp[i]);
+        }
+      }
+      // this.config.resources = items;
     }
+  }
+
+  setPaging (inp) {
+    this.page = 0;
+    this.paging = inp;
+    this.setPage()
   }
 
 
