@@ -17,6 +17,7 @@ import { KomponenService } from './_service/_komponenservice/komponen.service';
 import { ProdukService } from './_service/_produkservice/produk.service';
 import { HttpModule } from '@angular/http'
 import { PagingService } from './_service/_common/paging.service';
+import { ProdukDetailComponent } from './controller/produk/produk-detail/produk-detail.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { PagingService } from './_service/_common/paging.service';
     LoginComponent,
     DashboardComponent,
     KomponenComponent,
-    ProdukComponent
+    ProdukComponent,
+    ProdukDetailComponent
   ],
   imports: [
     BrowserModule,
