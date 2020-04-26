@@ -51,20 +51,30 @@
                 <label class="sr-only">Deadline Produk</label>
                 <input type="text" class="form-control input-sm" id="deadlineProduk" placeholder="Deadline Produk">
               </div>
+              <div class="btn-group pull-right">
+                <button class="btn btn-info">Tambah Produk</button>
+              </div>
 
               <!-- <button class="btn btn-outline blue btn-sm" (click)="segarkan()"><i class="fa fa-refresh"></i> Segarkan</button> -->
             </div>
             <br />
             <div class="table-responsive">
-              <table class="table table-striped table-bordered table-advance table-hover" id="sample_1">
-                <tr>
+              <table class="table table-striped table-bordered table-advance table-hover">
+               <tr>
+                  <th class="text-center col-sm-1">
+                    <input type="checkbox">
+                  </th>
                   <th class="text-center">Nama Produk</th>
                   <th>Waktu Selesai</th>
-                  <th class="text-center">Status</th>
+                  <th class="text-center">Status Pengerjaan</th>
+                  <th class="text-center">Status Produk</th>
                 </tr>
-                <tr *ngFor="let item of data; index as i" [ngClass]="''">
-                  <td class="text-center">
-                    <button class="btn yellow-mint btn-outline btn-xs uppercase" (click)="onDetailPage(item)">
+                <tr *ngFor="let item of data; index as i">
+                  <td class="text-center col-sm-1">
+                    <input type="checkbox">
+                  </td>
+                  <td class="text-center col-sm-3">
+                    <button style="width:30%" class="btn yellow-mint btn-outline btn-xs uppercase" (click)="onDetailPage(item)">
                       {{item.namaProduk}} </button>
                     <!-- <button *ngIf="item.status == 'PERUBAHAN' && this.validateDisabled(item.flag_vvip) == true" 
                             (click)="onDetailPage(item)" class="btn yellow-mint btn-outline btn-xs">{{item.kode_permohonan}}</button> -->
@@ -73,14 +83,19 @@
                     {{(item.tanggalAkhir | date:'dd-MM-yyyy hh:mm:ss') }}
                   </td>
                   <td class="text-center">
-                    <!-- <span *ngIf="!item.isProses" class="badge badge-danger">
+                    <span *ngIf="!item.statusPengerjaan" class="badge badge-danger">
                       Belum Diproses
                     </span>
-                    <span *ngIf="item.isProses" class="badge bg-green-meadow">
-                      Sudah Diproses
-                    </span> -->
-                    <span class="badge badge-danger">
-                      Belum Selesai
+                    <span *ngIf="item.statusPengerjaan" class="badge bg-green-meadow">
+                      Selesai
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <span *ngIf="!item.statusProduk" class="badge badge-danger">
+                      Tidak Aktif
+                    </span>
+                    <span *ngIf="item.statusProduk" class="badge bg-green-meadow">
+                      Aktif
                     </span>
                   </td>
                 </tr>

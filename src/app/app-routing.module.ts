@@ -5,13 +5,17 @@ import { DashboardComponent } from './controller/dashboard/dashboard.component';
 import { SchedulerComponent } from './scheduler/scheduler.component';
 import { ProdukComponent } from './controller/produk/produk.component';
 import { KomponenComponent } from './controller/komponen/komponen.component';
+import { ProdukDetailComponent } from './controller/produk/produk-detail/produk-detail.component';
+import { SortingComponent } from './controller/sorting/sorting.component';
 
 const routes: Routes = [
   { path : '',redirectTo: 'login', pathMatch: 'full'},
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: SchedulerComponent },
   { path: 'komponen', component: KomponenComponent },
-  { path: 'produk', component: ProdukComponent }
+  { path: 'produk', component: ProdukComponent },
+  { path: 'detail-produk', component: ProdukDetailComponent},
+  { path: 'sorting', component: SortingComponent }
 
   
 ];

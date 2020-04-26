@@ -145,7 +145,8 @@ export class SchedulerComponent implements AfterViewInit {
     this.events = [];
     this.data=[];
     this.maxPage = this.dataTemp.length/paging;
-    this.maxPage = (this.dataTemp.length%paging) == 0? Math.round(this.maxPage) :  Math.round(this.maxPage) + 1;
+    console.log(Math.round(this.maxPage))
+    this.maxPage = (this.maxPage) - Math.round(this.maxPage)  < 0? Math.round(this.maxPage) :  Math.round(this.maxPage) + 1;
     if (this.dataTemp.length == 0) {
       this.page = 0;
       this.maxPage = 0

@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ProdukService } from 'src/app/_service/_produkservice/produk.service';
-import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { LoaderService } from 'src/app/_service/_common/loader.service';
+import { SortingService } from 'src/app/_service/_sortingservice/sorting.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-produk',
-  templateUrl: './produk.component.html',
-  styleUrls: ['./produk.component.css']
+  selector: 'app-sorting',
+  templateUrl: './sorting.component.html',
+  styleUrls: ['./sorting.component.css']
 })
-export class ProdukComponent implements OnInit {
+export class SortingComponent implements OnInit {
 
   data : any[] = [];
   paging: number = 5;
@@ -16,19 +19,25 @@ export class ProdukComponent implements OnInit {
   page: number = 0;
   dataTemp: any [] = []
   eventsTemp: any[] = [];
+  tanggalMulai;
+  jamMulai;
 
   constructor(
     private produkService : ProdukService,
     private router : Router,
     private dp : DatePipe,
+    private loaderService: LoaderService,
+    private sortingService: SortingService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
-    this.produkService.findAll().subscribe(output => {
-      let hasil = output.json();
-      this.dataTemp=hasil.item;
-      this.setPage();
-    })
+    // this.produkService.findAll().subscribe(output => {
+    //   let hasil = output.json();
+    //   this.dataTemp=hasil.item;
+    //   this.setPage();
+    // })
+
   }
 
   setPage(page = 0, paging=this.paging) {
@@ -68,6 +77,30 @@ export class ProdukComponent implements OnInit {
     this.produkService.produkDetail = item;
     console.log(JSON.stringify(item))
     this.router.navigateByUrl('/detail-produk')
+  }
+
+  doSorting() {
+    this.loaderService.display(true,'Mohon tunggu...')
+    this.sortingService.doSorting(this.tanggalMulai, this.jamMulai)
+    .subscribe(
+      output => {
+        let hasil = output.json()
+        if(hasil.success) {
+          this.toastr.success(hasil.message,'Sukses!');
+        } else {
+          this.toastr.error(hasil.message,'Sukses!');
+        }
+        this.loaderService.display(false)
+      },
+      error => {
+        this.toastr.error('Gagal melakukan sorting','Sukses!');
+        this.loaderService.display(false)
+      }
+    )
+  }
+
+  doNestSorting() {
+
   }
 
 }

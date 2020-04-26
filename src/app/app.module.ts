@@ -18,6 +18,13 @@ import { ProdukService } from './_service/_produkservice/produk.service';
 import { HttpModule } from '@angular/http'
 import { PagingService } from './_service/_common/paging.service';
 import { ProdukDetailComponent } from './controller/produk/produk-detail/produk-detail.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { SortingComponent } from './controller/sorting/sorting.component';
+import { LoaderService } from './_service/_common/loader.service';
+import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
+
 
 @NgModule({
   declarations: [
@@ -27,14 +34,21 @@ import { ProdukDetailComponent } from './controller/produk/produk-detail/produk-
     DashboardComponent,
     KomponenComponent,
     ProdukComponent,
-    ProdukDetailComponent
+    ProdukDetailComponent,
+    SortingComponent
   ],
   imports: [
     BrowserModule,
     SchedulerModule,
     AppRoutingModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    ModalModule.forRoot(),
+    MatDatepickerModule,
+    MatNativeDateModule
+
     
    
   ],
@@ -44,7 +58,8 @@ import { ProdukDetailComponent } from './controller/produk/produk-detail/produk-
     LoginService,
     ProdukService,
     KomponenService,
-    PagingService
+    PagingService,
+    LoaderService,
   ],
   bootstrap: [AppComponent]
 })

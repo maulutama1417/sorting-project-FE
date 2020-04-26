@@ -24,18 +24,20 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/font-awesome/css/font-awesome.min.css",
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/font-awesome/css/font-awesome.min.css",
               "src/assets/css/components.min.css",
               "src/assets/css/default.min.css",
               "src/assets/css/custom.min.css",
               "src/assets/css/layout.min.css",
               "src/assets/css/login.min.css",
               "src/assets/css/datepicker.min.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.css"
             ],
-            "scripts": [ "src/assets/js/jquery.min.js",
-              "src/assets/js/bootstrap.min.js",
+            "scripts": [ 
+              "src/assets/js/jquery.min.js",
+              "./src/assets/js/bootstrap.min.js",
               "src/assets/js/datepicker.min.js",
               "src/assets/js/morris.min.js",
               "src/assets/js/raphael-min.js",
