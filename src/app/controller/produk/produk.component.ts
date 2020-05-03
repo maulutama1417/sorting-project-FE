@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProdukService } from 'src/app/_service/_produkservice/produk.service';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-produk',
@@ -10,17 +12,31 @@ import { Router } from '@angular/router';
 })
 export class ProdukComponent implements OnInit {
 
+  @ViewChild('modalEdit') modalEdit: ModalDirective
+
   data : any[] = [];
   paging: number = 5;
   maxPage: number;
   page: number = 0;
   dataTemp: any [] = []
   eventsTemp: any[] = [];
+  statusAll = false;
+  itemModal : any = {};
+  statusItemModal : boolean;
+  tambahProduk: any = {
+    "namaProduk":null,
+    "tanggalProduk":null,
+    "statusProduk":true
+  };
+  namaProduk: any;
+  tanggalDeadline;
+  jamDeadline;
 
   constructor(
     private produkService : ProdukService,
     private router : Router,
     private dp : DatePipe,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -68,6 +84,27 @@ export class ProdukComponent implements OnInit {
     this.produkService.produkDetail = item;
     console.log(JSON.stringify(item))
     this.router.navigateByUrl('/detail-produk')
+  }
+
+  changeAll () {
+  
+  }
+
+  edit() {
+    this.produkService.edit(this.itemModal.id, this.statusItemModal)
+  }
+
+  openModal(item) {
+    this.itemModal = item;
+    this.statusItemModal = item.statusProduk;
+  }
+
+  save() {
+    console.log(this.tambahProduk)
+    this.produkService.add(this.tambahProduk).subscribe
+    (output => {
+      this.toastr.success("Berhasil tambah data!")
+    })
   }
 
 }

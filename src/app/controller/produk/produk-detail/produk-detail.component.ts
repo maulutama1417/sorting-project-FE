@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as XLSX from 'xlsx';
+import readXlsxFile from 'read-excel-file'
 
 type AOA = any[][];
 
@@ -188,6 +189,8 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
         item.lebar = this.dataExcel[i][6]
         item.tinggi = this.dataExcel[i][7]
         item.prioritas = this.dataExcel[i][12]
+        item.nest = this.dataExcel[i][31]
+        item.alatPLM = this.dataExcel[i][32]
         
         for (let j = 13; j < 29; j++) {
           switch (j) {

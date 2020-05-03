@@ -28,10 +28,11 @@ export class SortingService {
     })
   }
 
-  doNestSorting() {
+  doNestSorting(item, jam) {
     let options = new RequestOptions()
     return this.http.post(environment.urlSorting + '/do-nest-sorting', {
-      
+      "tanggal_mulai":item,
+      "jam_mulai": jam
     })
   }
 

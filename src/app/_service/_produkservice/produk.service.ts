@@ -25,4 +25,21 @@ export class ProdukService {
       "name":id
     })
   }
+
+  edit (id, status) {
+    window.alert('Produk dengan id ' + id + ' status produknya ' + status)
+    let options = new RequestOptions()
+    return this.http.post(environment.urlProduk + '/add', {
+      "name":id
+    })
+  }
+
+  add (itemTambah) {
+    let options = new RequestOptions()
+    return this.http.post(environment.urlProduk + '/add', {
+      "namaProduk":itemTambah.namaProduk,
+      "tanggalProduk":itemTambah.tanggalProduk,
+      "statusProduk":itemTambah.statusProduk
+    })
+  }
 }

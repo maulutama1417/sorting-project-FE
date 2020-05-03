@@ -100,7 +100,23 @@ export class SortingComponent implements OnInit {
   }
 
   doNestSorting() {
-
+    this.loaderService.display(true,'Mohon tunggu...')
+    this.sortingService.doNestSorting(this.tanggalMulai, this.jamMulai)
+    .subscribe(
+      output => {
+        let hasil = output.json()
+        if(hasil.success) {
+          this.toastr.success(hasil.message,'Sukses!');
+        } else {
+          this.toastr.error(hasil.message,'Sukses!');
+        }
+        this.loaderService.display(false)
+      },
+      error => {
+        this.toastr.error('Gagal melakukan sorting','Sukses!');
+        this.loaderService.display(false)
+      }
+    )
   }
 
 }
