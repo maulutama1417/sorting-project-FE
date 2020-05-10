@@ -37,9 +37,11 @@ export class ProdukService {
   add (itemTambah) {
     let options = new RequestOptions()
     return this.http.post(environment.urlProduk + '/add', {
-      "namaProduk":itemTambah.namaProduk,
-      "tanggalProduk":itemTambah.tanggalProduk,
-      "statusProduk":itemTambah.statusProduk
+      // "namaProduk":itemTambah.namaProduk,
+      // "tanggalProduk":itemTambah.tanggalProduk,
+      // "statusProduk":itemTambah.statusProduk,
+      // "kuantitas":itemTambah.kuantitas
+      "itemTambah":itemTambah
     })
   }
 }
