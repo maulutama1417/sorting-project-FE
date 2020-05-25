@@ -6,6 +6,7 @@ import { Toast, ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as XLSX from 'xlsx';
 import readXlsxFile from 'read-excel-file'
+import { LoaderService } from 'src/app/_service/_common/loader.service';
 
 type AOA = any[][];
 
@@ -41,7 +42,8 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
     private produkService: ProdukService,
     private komponenService: KomponenService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private loaderService: LoaderService
   ) { }
 
 
@@ -276,19 +278,22 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
   }
 
   save() {
+    this.modal.hide()
+    this.loaderService.display(true,'Mohon tunggu...')
     if (this.metode == 'UPLOAD') {
       this.komponenService.uploadFile(this.itemSaved, this.produkDetail).subscribe(
         output => {
           let hasil = output.json()
           if (hasil.result) {
             this.toastr.success(hasil.message, 'Sukses!')
-            this.modal.hide()
+            this.loaderService.display(false)
           } else {
             this.toastr.error(hasil.message,'Gagal!')
+            this.loaderService.display(false)
           }
         },
         error => {
-          
+          this.loaderService.display(false)
         }
       )
     }

@@ -253,7 +253,7 @@
                 <div class="modal-footer">
                   <button type="button" class="btn dark btn-outline" data-dismiss="modal"
                     (click)="handlerModal('onHidden', $event)">Batal</button>
-                  <button type="button" (click)="save()" class="btn green">Simpan</button>
+                  <button type="button" [disabled]="errorUpload" (click)="save()" class="btn green">Simpan</button>
                 </div>
               </div>
             </div>

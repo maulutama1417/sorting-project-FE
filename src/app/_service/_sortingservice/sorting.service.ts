@@ -20,19 +20,21 @@ export class SortingService {
     })
   }
 
-  doSorting(item, jam) {
+  doSorting(item, jam,dataTgl) {
     let options = new RequestOptions()
     return this.http.post(environment.urlSorting + '/doSorting', {
         "tanggal_mulai":item,
-        "jam_mulai": jam
+        "jam_mulai": jam,
+        "single_shift":dataTgl
     })
   }
 
-  doNestSorting(item, jam) {
+  doNestSorting(item, jam, dataTgl) {
     let options = new RequestOptions()
     return this.http.post(environment.urlSorting + '/do-nest-sorting', {
       "tanggal_mulai":item,
-      "jam_mulai": jam
+      "jam_mulai": jam,
+      "single_shift":dataTgl
     })
   }
 

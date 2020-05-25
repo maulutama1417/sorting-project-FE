@@ -5,6 +5,8 @@ import { DatePipe } from '@angular/common';
 import { LoaderService } from 'src/app/_service/_common/loader.service';
 import { SortingService } from 'src/app/_service/_sortingservice/sorting.service';
 import { ToastrService } from 'ngx-toastr';
+import { Formatter } from 'src/app/_libs/formatter';
+import { format } from 'util';
 
 @Component({
   selector: 'app-sorting',
@@ -14,12 +16,13 @@ import { ToastrService } from 'ngx-toastr';
 export class SortingComponent implements OnInit {
 
   data : any[] = [];
+  dataTgl: any[]=[]
   paging: number = 5;
   maxPage: number;
   page: number = 0;
   dataTemp: any [] = []
   eventsTemp: any[] = [];
-  tanggalMulai;
+  tanggalMulai : Date;
   jamMulai;
 
   constructor(
@@ -28,7 +31,8 @@ export class SortingComponent implements OnInit {
     private dp : DatePipe,
     private loaderService: LoaderService,
     private sortingService: SortingService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private formatter: Formatter
   ) { }
 
   ngOnInit(): void {
@@ -81,7 +85,7 @@ export class SortingComponent implements OnInit {
 
   doSorting() {
     this.loaderService.display(true,'Mohon tunggu...')
-    this.sortingService.doSorting(this.tanggalMulai, this.jamMulai)
+    this.sortingService.doSorting(this.tanggalMulai, this.jamMulai,this.dataTgl)
     .subscribe(
       output => {
         let hasil = output.json()
@@ -101,7 +105,7 @@ export class SortingComponent implements OnInit {
 
   doNestSorting() {
     this.loaderService.display(true,'Mohon tunggu...')
-    this.sortingService.doNestSorting(this.tanggalMulai, this.jamMulai)
+    this.sortingService.doNestSorting(this.tanggalMulai, this.jamMulai, this.dataTgl)
     .subscribe(
       output => {
         let hasil = output.json()
@@ -119,4 +123,20 @@ export class SortingComponent implements OnInit {
     )
   }
 
+  addTgl() {
+    let jamMulai = new Date();
+    let jamSelesai = new Date();
+    let item = {"tanggal_mulai":jamMulai, "tanggal_akhir":jamSelesai}
+    this.dataTgl.push(item)
+  }
+
+  delete(i) {
+   let itemTemp = this.dataTgl;
+   this.dataTgl = [];
+   for (let k = 0; k < itemTemp.length; k++) {
+     if (k != i) {
+       this.dataTgl.push(itemTemp[k]);
+     }
+   }
+  }
 }
