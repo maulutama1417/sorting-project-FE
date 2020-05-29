@@ -33,4 +33,12 @@ export class KomponenService {
     })
   }
 
+  editPengerjaan (listItem, status) {
+    let options = new RequestOptions()
+    return this.http.post(environment.urlKomponen + '/edit-pengerjaan', {
+      "list_id":listItem,
+      "status":status
+    })
+  }
+
 }

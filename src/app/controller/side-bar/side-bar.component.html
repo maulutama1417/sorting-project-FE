@@ -47,10 +47,24 @@
                 </a>
             </li>
             <li class="nav-item" routerLinkActive="open active">
-                <a [routerLink]="['/sorting']" class="nav-link">
-                    <span class="title">Pengaturan Aplikasi</span>
+                <a [routerLink]="['/alat']" class="nav-link">
+                    <span class="title">Pengaturan Alat</span>
                 </a>
             </li>
+            <!-- <li class="nav-item" routerLinkActive="open active">
+                <a  class="nav-link nav-toggle">
+                    <span class="title">Pengaturan aplikasi</span>
+                    <span id="mmSpan"  class="arrow"></span>
+                </a>
+                <ul class="sub-menu">
+                    <li class="nav-item"  routerLinkActive="open active">
+                        <a  [routerLink]="['/alat']"  class="nav-link">
+                            <span class="title">Pengaturan Alat</span>
+                        </a>
+                    </li>
+                </ul>
+            </li> -->
+           
             <!-- <li class="nav-item" *ngFor="let item of menu" routerLinkActive="open active">
                 <a *ngIf="!item.ulOnly || item.ulOnly == null" [routerLink]="['/'+item.path]" class="nav-link">
                     <i [class]="item.fa" aria-hidden="true"></i>

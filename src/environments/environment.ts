@@ -12,6 +12,7 @@ const pathProduk = '/produk';
 const pathKomponen = '/komponen';
 const pathLogin = '/login';
 const pathSorting = '/sorting';
+const pathAlat = '/alat'
 
 export const environment = {
   production: false,
@@ -19,6 +20,7 @@ export const environment = {
   urlKomponen :apiGateway.url + pathKomponen,
   urlLogin : apiGateway.url + pathLogin,
   urlSorting : apiGateway.url + pathSorting,
+  urlAlat : apiGateway.url + pathAlat
 };
 
 

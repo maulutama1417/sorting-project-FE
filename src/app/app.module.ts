@@ -25,6 +25,8 @@ import { SortingComponent } from './controller/sorting/sorting.component';
 import { LoaderService } from './_service/_common/loader.service';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { Formatter } from './_libs/formatter';
+import { AlatComponent } from './controller/pengaturan-aplikasi/alat/alat.component';
+import { DetailAlatComponent } from './controller/pengaturan-aplikasi/alat/detail-alat/detail-alat.component';
 
 
 @NgModule({
@@ -36,7 +38,9 @@ import { Formatter } from './_libs/formatter';
     KomponenComponent,
     ProdukComponent,
     ProdukDetailComponent,
-    SortingComponent
+    SortingComponent,
+    AlatComponent,
+    DetailAlatComponent
   ],
   imports: [
     BrowserModule,

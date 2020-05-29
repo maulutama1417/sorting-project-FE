@@ -19,6 +19,7 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
 
   @ViewChild(ModalDirective) modal: ModalDirective
   @ViewChild(ModalDirective) modalLogin: ModalDirective
+  @ViewChild(ModalDirective) modalProsesKomp: ModalDirective
 
 
   produkDetail: any;
@@ -37,6 +38,11 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
   errorUpload = false;
   pesanErrorUpload : string;
   itemSaved: any[] = [];
+  detailProsesKomp : any[] = []
+  detailPageProsKomp=0;
+  kuantitas: number;
+  itemEdit = [];
+  status: any;
 
   constructor(
     private produkService: ProdukService,
@@ -60,6 +66,7 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
         let hasil = output.json();
         this.prosesKomponenTemp = hasil.prosesKompList;
         this.dataTemp = hasil.komponen;
+        this.kuantitas = this.prosesKomponenTemp[0].komponen.produk.kuantitas;
         this.page = 0;
         this.setPage()
       }
@@ -74,14 +81,31 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
 
   onDetailPage(namaKomponen) {
     this.prosesKomponen = [];
+    this.itemEdit = []
     this.isClickDetail = true;
     for(let i=0; i<this.prosesKomponenTemp.length; i++) {
       let objectCompare = this.prosesKomponenTemp[i];
+      objectCompare.checked = 0;
       if (namaKomponen==objectCompare.komponen.namaKomponen) {
         this.prosesKomponen.push(objectCompare);
       }
     }
-    
+    this.setPageKomponen()
+  }
+
+  setPageKomponen (tambah = 0) {
+    if (tambah >0) {
+      this.detailPageProsKomp++;
+    } else if (tambah <0) {
+      this.detailPageProsKomp--;
+    }
+
+    let batas = this.prosesKomponen.length / this.kuantitas;
+
+    this.detailProsesKomp = []
+    for (let i = 0; i < batas; i++) {
+      this.detailProsesKomp.push(this.prosesKomponen[i + (this.detailPageProsKomp * batas)]);
+    }
   }
 
   setPage(page = 0, paging = this.paging) {
@@ -297,6 +321,43 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
         }
       )
     }
+  }
+
+  putItem(item) {
+    if (item.checked == 1)  {
+      item.checked = 0;
+      this.itemEdit = this.itemEdit.filter(function(x) {
+        return x!=item.id
+      })
+    } else {
+      item.checked = 1;
+      this.itemEdit.push(item.id)
+    }
+  }
+
+  saveProsesKomponen() {
+    this.loaderService.display(true, 'Harap Tunggu...')
+    this.komponenService.editPengerjaan(this.itemEdit, this.status)
+    .subscribe( output => {
+      let hasil = output.json()
+      if (hasil.result) {
+        for (let i = 0; i < this.detailProsesKomp.length; i++) {
+          for (let j = 0; j < this.itemEdit.length; j++) {
+            if (this.itemEdit[j] ==  this.detailProsesKomp[i].id) {
+              this.detailProsesKomp[i].isProses = this.status ? 1 : 0;
+              break;
+            }
+          }
+        }
+        this.toastr.success(hasil.message)
+      } else {
+        this.toastr.error(hasil.message)
+      }
+    }, error  => {
+      this.toastr.error("Gagal merubah status proses!")
+      console.error(error)
+    })
+    this.loaderService.display(false)
   }
 
 }

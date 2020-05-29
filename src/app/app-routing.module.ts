@@ -7,6 +7,8 @@ import { ProdukComponent } from './controller/produk/produk.component';
 import { KomponenComponent } from './controller/komponen/komponen.component';
 import { ProdukDetailComponent } from './controller/produk/produk-detail/produk-detail.component';
 import { SortingComponent } from './controller/sorting/sorting.component';
+import { AlatComponent } from './controller/pengaturan-aplikasi/alat/alat.component';
+import { DetailAlatComponent } from './controller/pengaturan-aplikasi/alat/detail-alat/detail-alat.component';
 
 const routes: Routes = [
   { path : '',redirectTo: 'login', pathMatch: 'full'},
@@ -15,9 +17,9 @@ const routes: Routes = [
   { path: 'komponen', component: KomponenComponent },
   { path: 'produk', component: ProdukComponent },
   { path: 'detail-produk', component: ProdukDetailComponent},
-  { path: 'sorting', component: SortingComponent }
-
-  
+  { path: 'sorting', component: SortingComponent },
+  { path: 'alat', component: AlatComponent},
+  { path: 'detail-alat', component: DetailAlatComponent} 
 ];
 
 @NgModule({
