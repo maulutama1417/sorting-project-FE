@@ -21,23 +21,25 @@ export class DetailAlatComponent implements OnInit {
   statusAll = false;
   itemModal : any = {};
   statusItemModal : boolean;
-  tambahProduk: any = {
-    "namaProduk":null,
-    "tanggalProduk":null,
-    "statusProduk":true,
-    "kuantitas":null
+  itemAdd: any = {
+    "namaAlat":null,
+    "deskripsi":null,
+    "status":true
   };
   namaProduk: any;
   tanggalDeadline;
   jamDeadline;
   namaProdukFilter: string;
   title: any;
+  itemEdit = [];
+  status: any;
+  errDuplicate = false;
 
   constructor(
     private alatService: AlatService,
    private router : Router,
     private dp : DatePipe,
-    private loadService: LoaderService,
+    private loaderService: LoaderService,
     private toastr: ToastrService
   ) { }
 
@@ -45,9 +47,21 @@ export class DetailAlatComponent implements OnInit {
     this.title = this.alatService.itemDetail;
     this.alatService.findByMasterNamaAlat().subscribe(output => {
       let hasil = output.json();
-      this.dataTemp = hasil.item;
-
-      this.setPage();
+      if (hasil.success) {
+        this.dataTemp = hasil.item;
+        if (this.dataTemp.length != 0) {
+          this.itemAdd.idMasterAlat = this.dataTemp[0].masterAlat.id;
+        }
+        for (let i = 0; i < this.dataTemp.length; i++) {
+          this.dataTemp[i].checked = 0
+        }
+        this.setPage();
+      } else {
+        this.router.navigateByUrl('/alat')
+      }
+    }, error => {
+      console.error(error);
+      this.router.navigateByUrl('/alat')
     })
   }
 
@@ -66,7 +80,6 @@ export class DetailAlatComponent implements OnInit {
       }
       // let items : any[] = [];
       if ((sourceData.length - (this.page*paging)) < paging) {
-        console.log((this.page * paging) + (sourceData.length%paging));
         for (let i = (this.page * paging); i < (this.page * paging) + (sourceData.length%paging); i++) {
           this.data.push(sourceData[i]);
         }
@@ -100,8 +113,63 @@ export class DetailAlatComponent implements OnInit {
 
   onDetailPage(item) {
     this.alatService.itemDetail = item;
-    console.log(JSON.stringify(item))
     this.router.navigateByUrl('/detail-produk')
   } 
+
+  putItem(item) {
+    if (item.checked == 1)  {
+      item.checked = 0;
+      this.itemEdit = this.itemEdit.filter(function(x) {
+        return x!=item.id
+      })
+    } else {
+      item.checked = 1;
+      this.itemEdit.push(item.id)
+    }
+  }
+
+  saveStatusAlat() {
+    this.loaderService.display(true, 'Harap Tunggu...')
+    this.alatService.editStatus(this.itemEdit, this.status)
+    .subscribe( output => {
+      let hasil = output.json()
+      if (hasil.result) {
+       this.ngOnInit()
+        this.toastr.success(hasil.message)
+      } else {
+        this.toastr.error(hasil.message)
+      }
+    }, error  => {
+      this.toastr.error("Gagal merubah status proses!")
+      console.error(error)
+    })
+    this.loaderService.display(false)
+  }
+
+  addAlat() {
+    this.alatService.add(this.itemAdd).subscribe(
+      output => {
+        let hasil = output.json()
+        if (hasil.result) {
+          this.toastr.success(hasil.message)
+          this.ngOnInit()
+        } else {
+          this.toastr.error(hasil.message)
+        }
+      }
+    )
+  }
+
+  checkNama () {
+    let output = false;
+   this.dataTemp.forEach(element => {
+     if (element.namaAlat == this.itemAdd.namaAlat) {
+      output = true;
+     }
+   });
+   
+   this.errDuplicate = output;
+
+  }
 
 }

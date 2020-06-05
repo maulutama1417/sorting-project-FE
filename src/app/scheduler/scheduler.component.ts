@@ -1,9 +1,10 @@
-import {Component, ViewChild, AfterViewInit} from '@angular/core';
-import {DayPilot, DayPilotSchedulerComponent} from 'daypilot-pro-angular';
-import {DataService} from './data.service';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { DayPilot, DayPilotSchedulerComponent } from 'daypilot-pro-angular';
+import { DataService } from './data.service';
 import { DatePipe } from '@angular/common';
 import { SortingService } from '../_service/_sortingservice/sorting.service';
 import { Formatter } from '../_libs/formatter';
+import * as XLSX from 'xlsx';
 import { utils } from 'protractor';
 import { FormControl } from '@angular/forms';
 import { PagingService } from '../_service/_common/paging.service';
@@ -15,14 +16,14 @@ import { PagingService } from '../_service/_common/paging.service';
 })
 export class SchedulerComponent implements AfterViewInit {
 
-  @ViewChild('scheduler', {static: false})
+  @ViewChild('scheduler', { static: false })
   scheduler: DayPilotSchedulerComponent;
 
   events: any[] = [];
   item: DayPilot.Date;
   startDate = new Date(1990, 0, 1);
   beginDate = DayPilot.Date.today();
-  format : Formatter = new Formatter();
+  format: Formatter = new Formatter();
   rowsOnPage: number = 10
   pager: any = {}
   totalData: number;
@@ -34,9 +35,11 @@ export class SchedulerComponent implements AfterViewInit {
   paging: number = 5;
   maxPage: number;
   page: number = 0;
-  dataTemp: any [] = []
+  dataTemp: any[] = []
   eventsTemp: any[] = [];
   resourcesTemp: DayPilot.ResourceData[] = [];
+  flagDownload = false;
+  hasilSorting: any[] = []
 
 
 
@@ -61,7 +64,7 @@ export class SchedulerComponent implements AfterViewInit {
     timeRangeSelectedHandling: "Enabled",
     onTimeRangeSelected: function (args) {
       var dp = this;
-      DayPilot.Modal.prompt("Create a new event:", "Event 1").then(function(modal) {
+      DayPilot.Modal.prompt("Create a new event:", "Event 1").then(function (modal) {
         dp.clearSelection();
         if (!modal.result) { return; }
         dp.events.add(new DayPilot.Event({
@@ -88,7 +91,7 @@ export class SchedulerComponent implements AfterViewInit {
     eventClickHandling: "Disabled",
     eventHoverHandling: "Bubble",
     bubble: new DayPilot.Bubble({
-      onLoad: function(args) {
+      onLoad: function (args) {
         // if event object doesn't specify "bubbleHtml" property 
         // this onLoad handler will be called to provide the bubble HTML
         args.html = "Event details";
@@ -99,10 +102,10 @@ export class SchedulerComponent implements AfterViewInit {
 
   constructor(
     private ds: DataService,
-    private dp : DatePipe,
+    private dp: DatePipe,
     private sortingService: SortingService,
-    private pagingService : PagingService
-    ) {
+    private pagingService: PagingService
+  ) {
   }
 
   ngAfterViewInit(): void {
@@ -119,52 +122,52 @@ export class SchedulerComponent implements AfterViewInit {
 
   changeDay(inp = '2') {
     let now = new Date(this.config.startDate.toString())
-    if (inp=='0'){
-      now.setDate(now.getDate()-1)
-    } else if (inp=='1'){
-      now.setDate(now.getDate()+1)
+    if (inp == '0') {
+      now.setDate(now.getDate() - 1)
+    } else if (inp == '1') {
+      now.setDate(now.getDate() + 1)
     }
-    this.config.startDate = DayPilot.Date.parse(this.dp.transform(now,'yyyy-MM-ddTHH:mm:ss').toString()
-      ,'yyyy-MM-ddTHH:mm:ss').getDatePart();
+    this.config.startDate = DayPilot.Date.parse(this.dp.transform(now, 'yyyy-MM-ddTHH:mm:ss').toString()
+      , 'yyyy-MM-ddTHH:mm:ss').getDatePart();
 
-    this.sortingService.findAll(false,this.format.setTanggalToStr(now,2),this.format.setTanggalToStr(now,2))
-    .subscribe( output => {
-      let hasil = output.json();
-      this.eventsTemp = hasil.events;
-      this.resourcesTemp = hasil.resource;
-      this.dataTemp = hasil.hasilSorting;
-      // this.events = hasil.events;
-      this.config.resources = hasil.resource;
-      // this.data = hasil.hasilSorting;
-      this.page = 0;
-      this.setPage()
-    })
+    this.sortingService.findAll(false, this.format.setTanggalToStr(now, 2), this.format.setTanggalToStr(now, 2))
+      .subscribe(output => {
+        let hasil = output.json();
+        this.eventsTemp = hasil.events;
+        this.resourcesTemp = hasil.resource;
+        this.dataTemp = hasil.hasilSorting;
+        // this.events = hasil.events;
+        this.config.resources = hasil.resource;
+        // this.data = hasil.hasilSorting;
+        this.page = 0;
+        this.setPage()
+      })
   }
 
-  setPage(page = 0, paging=this.paging) {
+  setPage(page = 0, paging = this.paging) {
     this.events = [];
-    this.data=[];
-    this.maxPage = this.dataTemp.length/paging;
+    this.data = [];
+    this.maxPage = this.dataTemp.length / paging;
     console.log(Math.round(this.maxPage))
-    this.maxPage = (this.maxPage) - Math.round(this.maxPage)  < 0? Math.round(this.maxPage) :  Math.round(this.maxPage) + 1;
+    this.maxPage = (this.maxPage) - Math.round(this.maxPage) < 0 ? Math.round(this.maxPage) : Math.round(this.maxPage) + 1;
     if (this.dataTemp.length == 0) {
       this.page = 0;
       this.maxPage = 0
     } else {
-      if (page==1){
+      if (page == 1) {
         this.page++;
-      } else if (page==-1) {
+      } else if (page == -1) {
         this.page--;
       }
       // let items : any[] = [];
-      if ((this.dataTemp.length - (this.page*paging)) < paging) {
-        console.log((this.page * paging) + (this.dataTemp.length%paging));
-        for (let i = (this.page * paging); i < (this.page * paging) + (this.dataTemp.length%paging); i++) {
+      if ((this.dataTemp.length - (this.page * paging)) < paging) {
+        console.log((this.page * paging) + (this.dataTemp.length % paging));
+        for (let i = (this.page * paging); i < (this.page * paging) + (this.dataTemp.length % paging); i++) {
           this.events.push(this.eventsTemp[i]);
           this.data.push(this.dataTemp[i]);
         }
       } else {
-        for (let i = this.page * paging; i < (this.page +1) * paging; i++) {
+        for (let i = this.page * paging; i < (this.page + 1) * paging; i++) {
           this.events.push(this.eventsTemp[i]);
           this.data.push(this.dataTemp[i]);
         }
@@ -173,10 +176,40 @@ export class SchedulerComponent implements AfterViewInit {
     }
   }
 
-  setPaging (inp) {
+  setPaging(inp) {
     this.page = 0;
     this.paging = inp;
     this.setPage()
+  }
+
+  saveExcel() {
+    this.flagDownload = true;
+
+    this.sortingService.downloadHasil().subscribe(
+      output => {
+        let hasil = output.json();
+        this.hasilSorting = hasil.item;
+
+      }, error => { 
+        console.error(error)
+      }
+      , () => {
+        /* table id is passed over here */
+        let element = document.getElementById('excel-table');
+        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, 'hasil_sorting.xlsx');
+
+        this.flagDownload = false;
+      }
+
+    )
+
   }
 
 

@@ -26,4 +26,19 @@ export class AlatService {
     })
   }
 
+  editStatus (listItem, status) {
+    let options = new RequestOptions()
+    return this.http.post(environment.urlAlat + '/edit-pengerjaan', {
+      "list_id":listItem,
+      "status":status
+    })
+  }
+
+  add (item) {
+    let options = new RequestOptions()
+    return this.http.post(environment.urlAlat + '/do-add', {
+      "item":item    
+    })
+  }
+
 }

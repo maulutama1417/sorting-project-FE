@@ -38,4 +38,10 @@ export class SortingService {
     })
   }
 
+  downloadHasil () {
+    let options = new RequestOptions()
+    return this.http.post(environment.urlSorting + '/download-sorting', {
+    })
+  }
+
 }

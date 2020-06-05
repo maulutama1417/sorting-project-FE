@@ -49,25 +49,30 @@
                 <div class="form-group">
                   <input type="text" class="form-control input-sm" id="deadlineProduk" placeholder="Nama Proses">
                 </div>  
+                <!-- <div class="btn-group pull-right">
+                  <button class="btn btn-info">
+                    Tambah Group Alat
+                  </button>
+                </div> -->
                 <!-- <button class="btn btn-outline blue btn-sm" (click)="segarkan()"><i class="fa fa-refresh"></i> Segarkan</button> -->
               </div>
               <br />
               <div class="table-responsive">
                 <table class="table table-striped table-bordered table-advance table-hover">
                  <tr>
-                    <th class="text-center col-sm-1">No.</th>
+                    <th class="text-center">No.</th>
                     <th class="text-center">Group Alat</th>
                     <th class="text-center">Fungsi / Proses</th>
                     <th class="text-center">Aksi</th>
                   </tr>
                   <tr *ngFor="let item of data; index as i">
-                    <td class="text-center col-sm-1">
+                    <td class="text-center">
                       {{i+1}}
                     </td>
-                    <td class="text-center col-sm-3">
+                    <td class="text-center">
                      {{item.namaMasterAlat}}
                     </td>
-                    <td class="text-center col-sm-3">
+                    <td class="text-center">
                       {{item.proses }}
                     </td>
                     <td class="text-center">

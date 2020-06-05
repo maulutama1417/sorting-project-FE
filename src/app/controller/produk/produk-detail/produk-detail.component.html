@@ -150,7 +150,7 @@
                     <div *ngIf="prosesKomponen.length==0 && isClickDetail" class="">TIDAK ADA PROSES
                       PADA KOMPONEN</div>
                     <div *ngIf="prosesKomponen.length!=0" class="col-md-12">
-                      <table class="table table-striped table-bordered table-advance table-hover" id="sample_1">
+                      <table class="table table-striped table-bordered table-advance table-hover" id="excel-table">
                         <tr>
                           <th class="text-center" colspan="6">{{prosesKomponen[0].komponen.namaKomponen}}</th>
                         </tr>
@@ -204,7 +204,8 @@
                       </div>
                       <div class="pull-right">
                         {{itemEdit.length}} terpilih
-                        <button class="btn btn-info" data-toggle="modal" data-target="#modalProsesKomp" [disabled]="itemEdit.length==0">Ubah Status</button>
+                        <button class="btn btn-info" data-toggle="modal" data-target="#modalProsesKomp"
+                          [disabled]="itemEdit.length==0">Ubah Status</button>
                       </div>
                     </div>
                   </fieldset>
@@ -319,7 +320,8 @@
       <!-- /.modal-dialog -->
     </div>
 
-    <div class="modal fade bs-modal-sm" #modalProsesKomp id="modalProsesKomp" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal fade bs-modal-sm" #modalProsesKomp id="modalProsesKomp" tabindex="-1" role="basic"
+      aria-hidden="true">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header">
@@ -328,14 +330,15 @@
           </div>
           <div class="modal-body">
             <p>
-            Rincian list proses komponen terpilih :
+              Rincian list proses komponen terpilih :
             </p>
             <div class="form-horizontal" role="form">
               <div class="form-body">
                 <div class="form-group">
                   <label class="col-md-4 control-label">Jumlah Data : </label>
                   <div class="col-md-8">
-                    <input type="text" disabled class="form-control" placeholder="" inputFilter="int" [(ngModel)]="itemEdit.length">
+                    <input type="text" disabled class="form-control" placeholder="" inputFilter="int"
+                      [(ngModel)]="itemEdit.length">
                   </div>
                 </div>
                 <div class="form-group" style="margin-left: 10%;">

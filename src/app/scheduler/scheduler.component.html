@@ -1,6 +1,6 @@
 <div class="page-content-wrapper">
     <!-- BEGIN CONTENT BODY -->
-    <div class="page-content">
+    <div class="page-content" *ngIf="!flagDownload">
         <div class="page-head">
             <!-- BEGIN PAGE TITLE -->
             <div class="page-title">
@@ -54,7 +54,8 @@
                                     placeholder="Nama Komponen">
                             </div>
 
-
+                            <button style="padding-top: 3px; padding-bottom: 3px;" class="btn btn-info pull-right"
+                            (click)="saveExcel()">Unduh Sorting</button>
                             <!-- <button class="btn btn-outline blue btn-sm" (click)="segarkan()"><i class="fa fa-refresh"></i> Segarkan</button> -->
                         </div>
                         <br />
@@ -174,4 +175,39 @@
 
     </div>
     <!-- END CONTENT BODY -->
+    <div *ngIf="flagDownload">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-advance table-hover text-center" id="excel-table">
+                <tr>
+                    <th class="text-center">Nama Produk</th>
+                    <th>Nama Komponen</th>
+                    <th>Proses</th>
+                    <th>Alat</th>
+                    <th>Waktu Mulai</th>
+                    <th>Waktu Selesai</th>
+                    <th>Produk ke -</th>
+                </tr>
+                <tr *ngFor="let item of hasilSorting; index as i" [ngClass]="''">
+                    <td>
+                        <!-- <button *ngIf="item.status == 'PERUBAHAN' && this.validateDisabled(item.flag_vvip) == true" 
+                (click)="onDetailPage(item)" class="btn yellow-mint btn-outline btn-xs">{{item.kode_permohonan}}</button> -->
+                        {{item[4]}}
+                    </td>
+                    <td> {{item[3]}}</td>
+                    <td > {{item[6]}}</td>
+                    <td > {{item[5]}}</td>
+                    <td >
+                        {{(item[1] | date:'dd-MM-yyyy HH:mm:ss')}}
+                    </td>
+                    <td>
+                        {{(item[2] | date:'dd-MM-yyyy HH:mm:ss')}}
+                    </td>
+                    <td >
+                        {{item[0]}}
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
 </div>

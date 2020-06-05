@@ -16,7 +16,7 @@ export class AppComponent {
   constructor(
     private loaderService: LoaderService,
     location: Location,
-    router: Router,
+    private router: Router,
     public vcr: ViewContainerRef
   ) {
     router.events.subscribe(val => {
@@ -26,5 +26,10 @@ export class AppComponent {
 
   hideScreen() {
     this.loaderService.display(false);
+  }
+
+  logout() {
+    localStorage.removeItem('isLogin')
+    this.router.navigateByUrl('/login')
   }
 }
