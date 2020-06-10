@@ -27,10 +27,10 @@ export class ProdukService {
   }
 
   edit (id, status) {
-    window.alert('Produk dengan id ' + id + ' status produknya ' + status)
     let options = new RequestOptions()
-    return this.http.post(environment.urlProduk + '/add', {
-      "name":id
+    return this.http.post(environment.urlProduk + '/edit-status-produk', {
+      "id":id,
+      "status":status
     })
   }
 

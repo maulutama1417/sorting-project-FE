@@ -18,10 +18,11 @@ export class KomponenService {
     })
   }
 
-  edit (id) {
+  edit (id, status) {
     let options = new RequestOptions()
-    return this.http.post(environment.urlKomponen + '/edit', {
-      "id":id
+    return this.http.post(environment.urlKomponen + '/edit-komponen', {
+      "id":id,
+      "status":status
     })
   }
 
@@ -33,11 +34,12 @@ export class KomponenService {
     })
   }
 
-  editPengerjaan (listItem, status) {
+  editPengerjaan (listItem, status, produkId) {
     let options = new RequestOptions()
     return this.http.post(environment.urlKomponen + '/edit-pengerjaan', {
       "list_id":listItem,
-      "status":status
+      "status":status,
+      "produk_id":produkId
     })
   }
 

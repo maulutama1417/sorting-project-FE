@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output } from '@angular/core';
 import { ProdukService } from 'src/app/_service/_produkservice/produk.service';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/app/_service/_common/loader.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-produk',
@@ -34,6 +35,8 @@ export class ProdukComponent implements OnInit {
   tanggalDeadline;
   jamDeadline;
   namaProdukFilter: string;
+  itemEdit = [];
+  status = false;
 
   constructor(
     private produkService : ProdukService,
@@ -47,6 +50,10 @@ export class ProdukComponent implements OnInit {
     this.produkService.findAll().subscribe(output => {
       let hasil = output.json();
       this.dataTemp=hasil.item;
+      for (let index = 0; index < this.dataTemp.length; index++) {
+        this.dataTemp[index].checked = 0;
+
+      }
       this.setPage();
     })
   }
@@ -109,13 +116,26 @@ export class ProdukComponent implements OnInit {
   }
 
   edit() {
-    this.produkService.edit(this.itemModal.id, this.statusItemModal)
+    this.produkService.edit(this.itemEdit, this.status)
+    .subscribe(
+      output => {
+        let hasil = output.json()
+        if (hasil.success) {
+          this.toastr.success(hasil.message)
+        } else {
+          this.toastr.error(hasil.message)
+        }
+      }
+      ,error => {
+        this.toastr.error(environment._500)
+        console.error(error)
+      }
+      , () => {
+        this.ngOnInit()
+      }
+    )
   }
 
-  openModal(item) {
-    this.itemModal = item;
-    this.statusItemModal = item.statusProduk;
-  }
 
   save() {
     console.log(this.tambahProduk)
@@ -135,6 +155,39 @@ export class ProdukComponent implements OnInit {
       this.toastr.error("Gagal simpan data")
       this.loadService.display(false)
     })
+  }
+
+  putAll() {
+    if (this.statusAll) {
+      this.statusAll = false;
+      this.itemEdit = [];
+    } else {
+      this.statusAll = true;
+    }
+      for (let index = 0; index < this.dataTemp.length; index++) {
+        let item  = this.dataTemp[index];
+        item.checked = this.statusAll;
+         if (this.statusAll) {
+          this.itemEdit = this.itemEdit.filter(function(x) {
+            return x!=item.id
+          })
+          this.itemEdit.push(item.id);
+         }
+        this.dataTemp[index] = item;
+      }
+      this.setPage()
+  }
+
+  putSingle(item) {
+    if (item.checked == 1)  {
+      item.checked = 0;
+      this.itemEdit = this.itemEdit.filter(function(x) {
+        return x!=item.id
+      })
+    } else {
+      item.checked = 1;
+      this.itemEdit.push(item.id)
+    }
   }
 
 }

@@ -42,7 +42,12 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
   detailPageProsKomp=0;
   kuantitas: number;
   itemEdit = [];
+  itemKomponen = [];
   status: any;
+  statusKomponen: any;
+  statusAll = false;
+  statusAllKomponen = false;
+  tanggal : any;
 
   constructor(
     private produkService: ProdukService,
@@ -61,11 +66,15 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
       this.toastr.success("Sukses","Berhasil mendapatkan data!")
     }
     this.produkDetail = this.produkService.produkDetail;
+    this.tanggal = this.produkDetail.tanggalAkhir
     this.komponenService.findAllByProduk(this.produkDetail.namaProduk).subscribe(
       output => {
         let hasil = output.json();
         this.prosesKomponenTemp = hasil.prosesKompList;
         this.dataTemp = hasil.komponen;
+        for(let i=0; i<this.dataTemp.length; i++) {
+          this.dataTemp[i].checked = 0
+        }
         this.kuantitas = this.prosesKomponenTemp[0].komponen.produk.kuantitas;
         this.page = 0;
         this.setPage()
@@ -83,6 +92,7 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
     this.prosesKomponen = [];
     this.itemEdit = []
     this.isClickDetail = true;
+    this.statusAll = false;
     for(let i=0; i<this.prosesKomponenTemp.length; i++) {
       let objectCompare = this.prosesKomponenTemp[i];
       objectCompare.checked = 0;
@@ -156,11 +166,13 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
     if (this.username == null || this.password == null) {
       this.toastr.warning( 'Username / Password tidak boleh kosong!','Peringatan')
     } else {
-      this.komponenService.edit(this.prosesKomponen[0].komponen.id)
+      this.komponenService.edit(this.itemKomponen, this.statusKomponen)
       .subscribe(
         output => {
           let hasil = output.json()
           if (hasil.result) {
+            this.itemKomponen = [];
+            this.statusAllKomponen = false;
             this.toastr.success(hasil.message,'Sukses!')
             this.komponenService.findAllByProduk(this.produkDetail.namaProduk).subscribe(
               output => {
@@ -169,14 +181,11 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
                 this.dataTemp = hasil.komponen;
                 this.page = 0;
                 this.setPage()
-                this.modalLogin.hide()
               }
             )
           } else {
             this.toastr.success(hasil.message,'Gagal!')
           }
-
-
         },
         error => {
 
@@ -335,16 +344,79 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  putItemAll() {
+    if (this.statusAll) {
+      this.statusAll = false;
+      this.itemEdit = [];
+    } else {
+      this.statusAll = true;
+    }
+      for (let index = 0; index < this.prosesKomponen.length; index++) {
+        let item  = this.prosesKomponen[index];
+        item.checked = this.statusAll;
+         if (this.statusAll) {
+          this.itemEdit = this.itemEdit.filter(function(x) {
+            return x!=item.id
+          })
+          this.itemEdit.push(item.id);
+         }
+        this.prosesKomponen[index] = item;
+      }
+      let batas = this.prosesKomponen.length / this.kuantitas;
+      this.detailProsesKomp = []
+    for (let i = 0; i < batas; i++) {
+      this.detailProsesKomp.push(this.prosesKomponen[i + (this.detailPageProsKomp * batas)]);
+    }
+   
+  }
+
+  putKomponenAll() {
+    if (this.statusAllKomponen) {
+      this.statusAllKomponen = false;
+      this.itemKomponen = [];
+    } else {
+      this.statusAllKomponen = true;
+    }
+      for (let index = 0; index < this.dataTemp.length; index++) {
+        let item  = this.dataTemp[index];
+        item.checked = this.statusAllKomponen;
+         if (this.statusAllKomponen) {
+          this.itemKomponen = this.itemKomponen.filter(function(x) {
+            return x!=item.id
+          })
+          this.itemKomponen.push(item.id);
+         }
+        this.dataTemp[index] = item;
+      }
+      this.setPage()
+  }
+
+  putKomponen(item) {
+    if (item.checked == 1)  {
+      item.checked = 0;
+      this.itemKomponen = this.itemKomponen.filter(function(x) {
+        return x!=item.id
+      })
+    } else {
+      item.checked = 1;
+      this.itemKomponen.push(item.id)
+    }
+  }
+
   saveProsesKomponen() {
     this.loaderService.display(true, 'Harap Tunggu...')
-    this.komponenService.editPengerjaan(this.itemEdit, this.status)
+    this.komponenService.editPengerjaan(this.itemEdit, this.status, this.produkDetail.id)
     .subscribe( output => {
       let hasil = output.json()
       if (hasil.result) {
         for (let i = 0; i < this.detailProsesKomp.length; i++) {
           for (let j = 0; j < this.itemEdit.length; j++) {
             if (this.itemEdit[j] ==  this.detailProsesKomp[i].id) {
-              this.detailProsesKomp[i].isProses = this.status ? 1 : 0;
+              if (this.status == 'true') {
+              this.detailProsesKomp[i].isProses =  1;
+              } else {
+                this.detailProsesKomp[i].isProses =  0;
+              }
               break;
             }
           }
@@ -358,6 +430,10 @@ export class ProdukDetailComponent implements OnInit, OnDestroy {
       console.error(error)
     })
     this.loaderService.display(false)
+  }
+
+  editProduk () {
+    
   }
 
 }

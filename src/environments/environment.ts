@@ -20,7 +20,8 @@ export const environment = {
   urlKomponen :apiGateway.url + pathKomponen,
   urlLogin : apiGateway.url + pathLogin,
   urlSorting : apiGateway.url + pathSorting,
-  urlAlat : apiGateway.url + pathAlat
+  urlAlat : apiGateway.url + pathAlat,
+  _500 : 'Kesalahan pada jaringan!'
 };
 
 
