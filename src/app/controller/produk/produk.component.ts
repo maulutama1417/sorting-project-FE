@@ -131,6 +131,8 @@ export class ProdukComponent implements OnInit {
         console.error(error)
       }
       , () => {
+        this.itemEdit = [];
+        this.statusAll = false;
         this.ngOnInit()
       }
     )
